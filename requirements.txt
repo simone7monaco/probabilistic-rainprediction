@@ -1,0 +1,5 @@
+PyYAML
+sklearn
+torch
+torchvision
+pytorch-lightning
