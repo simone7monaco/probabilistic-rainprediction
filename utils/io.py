@@ -7,15 +7,6 @@ import pandas as pd
 from sklearn.model_selection import StratifiedKFold  # type: ignore
 
 
-# def get_model(topdir: Path, model_name: str, date: str, case_study_max: float) -> np.ndarray:
-#     file_path = topdir/"models"/f"{model_name}_{date}_0024_regrid.csv"
-#     if not file_path.exists():
-#         file_path = topdir/"models"/"data_intenseEvents"/"new_dataset"/f"{model_name}_{date}_0024_regrid.csv"
-#     assert file_path.exists(), f"File {file_path} does not exist"
-#     model_data = pd.read_csv(file_path, sep=";", header=None).to_numpy()
-#     return model_data / case_study_max
-
-
 def get_mask_indices(topdir: str, ispadded:bool):
     cs = topdir.stem.split('_')[-1] # OI | radar
     file_path = next(topdir.glob(f"{cs}*regrid*piem_vda.csv"))
@@ -30,18 +21,6 @@ def get_mask_indices(topdir: str, ispadded:bool):
     indices = np.where(mask == 1)
     indices_zero = np.where(mask == 0)
     return indices, indices_zero, mask
-
-
-# def get_obs(topdir: str, date: str, case_study_max: float) -> np.ndarray:
-#     # file_path = topdir / "obs" / "data" / f"OI_{date}_regrid.csv"
-#     case_study = topdir.stem.split('_')[-1] # OI | radar
-#     file_path = topdir / "obs" / "data"/f"{case_study}_{date}_regrid.csv"
-#     if not file_path.exists():
-#         file_path = file_path.parents[1]/"data_intenseEvents"/"new_dataset"/f"{case_study}_{date}_regrid.csv"
-#         if not file_path.exists():
-#             raise FileNotFoundError(f"File '{case_study}*{date}*.csv' does not exist")
-#     obs_data = pd.read_csv(file_path, sep=";", header=None).to_numpy()
-#     return obs_data / case_study_max
 
 
 def load_data(

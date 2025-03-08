@@ -15,20 +15,22 @@ from utils import str2bool
 
 def get_args(args=None):
 	parser = argparse.ArgumentParser()
-	parser.add_argument("--case_study", "-c", type=str, default="24h_10mmMAX_OI", choices=['24h_10mmMAX_OI', '24h_10mmMAX_radar'])
-	parser.add_argument("--network_model", "-m", type=str, default="unet", choices=['unet', 'sde_unet', 'ensemble_unet', 'mcd_unet'])
+	parser.add_argument("--case_study", "-c", type=str, default="24h_10mmMAX_OI", choices=['24h_10mmMAX_OI', '24h_10mmMAX_radar'],
+					    help="Dataset to use")
+	parser.add_argument("--network_model", "-m", type=str, default="unet", choices=['unet', 'sde_unet', 'ensemble_unet', 'mcd_unet'],
+					    help="Network model to use")
 	parser.add_argument("--output_path", "-o", type=Path, default=Path('lightning_logs'))
-	parser.add_argument("--batch_size", type=int, default=32)
+	parser.add_argument("--batch_size", type=int, default=32, help="Batch size")
 	# parser.add_argument("--split_idx", type=str, default="701515")
-	parser.add_argument("--n_split", type=int, default=8)
-	parser.add_argument("--lr", type=float, default=1e-4)
-	parser.add_argument("--epochs", "-e", type=int, default=300)
-	parser.add_argument("--mcdropout", type=float, default=0)
-	parser.add_argument("--load_checkpoint", type=Path, default=None)
-	parser.add_argument("--seed", type=int, default=42)
-	parser.add_argument("--wb", type=str2bool, nargs='?', const=True, default=False)
-	parser.add_argument("--eval_proba", type=str2bool, nargs='?', const=True, default=False)
-	parser.add_argument("--save_preds", type=str2bool, nargs='?', const=True, default=False)
+	parser.add_argument("--n_split", type=int, default=8, help="Number of splits for cross-validation")
+	parser.add_argument("--lr", type=float, default=1e-4, help="Learning rate")
+	parser.add_argument("--epochs", "-e", type=int, default=300, help="Max number of epochs")
+	parser.add_argument("--mcdropout", type=float, default=0, help="MC Dropout rate")
+	parser.add_argument("--load_checkpoint", type=Path, default=None, help="Path to a checkpoint to load")
+	parser.add_argument("--seed", type=int, default=42, help="Seed for reproducibility")
+	parser.add_argument("--wb", type=str2bool, nargs='?', const=True, default=False, help="Use Weights & Biases or not")
+	parser.add_argument("--eval_proba", type=str2bool, nargs='?', const=True, default=False, help="Evaluate the model on the test set and save the probabilities")
+	parser.add_argument("--save_preds", type=str2bool, nargs='?', const=True, default=False, help="Save the test predictions")
 	args = parser.parse_args(args)
 	return args
 	

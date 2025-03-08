@@ -3,22 +3,14 @@ from rasterio.warp import calculate_default_transform, reproject, Resampling
 import numpy as np
 import pandas as pd
 import os
+from pathlib import Path
 
-run_where="local"
 
-if run_where=="local":
-    root_path="/home/monaco/MultimodelPreci"
-    scratch_path=root_path
-elif run_where=="legion":
-    root_path="/home/meteo/Monaco/MultimodelPreci"
-    scratch_path="/mnt/netapp/scratch/LucaMonaco/MultimodelPreci"
-elif run_where=="mafalda":
-    root_path="/work/users/lmonaco/MultimodelPreci"
-    scratch_path=root_path
+scratch_path = Path.cwd() / "MultimodelPreci"
 
-input_path=scratch_path+"/case_study/24h_10mmMAX_radar"
-tiff_path=input_path+"/obs/tiff"
-obs_path=input_path+"/obs/data"
+input_path=scratch_path /"case_study/24h_10mmMAX_radar"
+tiff_path=input_path / "obs/tiff"
+obs_path=input_path / "obs/data"
 
 def get_files_with_full_path(directory):
     file_list = []
@@ -82,6 +74,6 @@ for f in files:
         lon_matrix=np.array(lon_matrix)
         raster=np.array(raster)
                
-        pd.DataFrame(raster).to_csv(obs_path+"/radarPIEM_"+f[1]+f[2]+f[3]+"_raw.csv", sep=';', index=False, header=False)
-        pd.DataFrame(lat_matrix).to_csv(obs_path+"/radarPIEM_lat_raw.csv", sep=';', index=False, header=False)
-        pd.DataFrame(lon_matrix).to_csv(obs_path+"/radarPIEM_lon_raw.csv", sep=';', index=False, header=False)
+        pd.DataFrame(raster).to_csv(obs_path/"radarPIEM_"+f[1]+f[2]+f[3]+"_raw.csv", sep=';', index=False, header=False)
+        pd.DataFrame(lat_matrix).to_csv(obs_path/"radarPIEM_lat_raw.csv", sep=';', index=False, header=False)
+        pd.DataFrame(lon_matrix).to_csv(obs_path/"radarPIEM_lon_raw.csv", sep=';', index=False, header=False)

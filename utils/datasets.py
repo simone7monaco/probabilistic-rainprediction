@@ -74,30 +74,3 @@ class IntenseDataset(NWPDataset):
     
     def __getitem__(self, index):
         return super().__getitem__(index) | {'isintense': self.labels[index]}
-
-
-class GermanRainDataset(Dataset):
-    def __init__(self, input_path, time_window=6):
-        """
-        Args:
-            input_path (Path): Path to the hdf5 file containing the data (supposed to be RYDL1.hdf5)
-            time_window (int): Number of timestamps to consider for each input sample
-        """
-        self.input_path = input_path
-        self.time_window = time_window
-        self.f = h5py.File(input_path, 'r')
-        self.keys = [k for k in self.f.keys() if k.endswith('00') or k.endswith('30')] 
-        # keys are in the format 'YYYYMMDDHHmm', with an interval of 5 minutes. Keep only the half-hourly data and remove the time-windows last
-
-    def __len__(self):
-        return len(self.keys) - 2*self.time_window
-
-    def __getitem__(self, index):
-
-        x_keys = self.keys[index:index+self.time_window]
-        y_key = self.keys[index+self.time_window]
-
-        x = torch.stack([torch.tensor(self.f[k][:]) for k in x_keys])
-        y = torch.tensor(self.f[y_key][:])
-        time = self.keys[index+self.time_window]
-        return {'x': x, 'y': y, 'time': time}
